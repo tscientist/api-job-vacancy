@@ -1,43 +1,42 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
-const Schema = mongoose.Schema;
+const Sequelize = require('sequelize')
+const sequelize = new Sequelize('teste', 'root', 'melhorenvio',{
+    host: 'localhost',
+    dialect: 'mysql'
+});
 
-const UserSchema = new Schema({
+const User = sequelize.define('users',{
     name: {
-        type: String,
-        trim: true,
-        required: true,
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            notNull: {
+                msg: 'Please enter your name'
+            }
+        }
     },
     email: {
-        type: String,
-        trim: true,
-        required: true
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            isEmail: true
+        },
     },
     password: {
-        type: String,
-        trim: true,
-        required: true
+        type: Sequelize.STRING,
+        allowNull: false,
     },
     phoneNumber: {
-        type: String,
-        trim: true,
-        required: true
+        type: Sequelize.STRING,
+        allowNull: false,
     },
     cpf: {
-        type: String,
-        trim: true,
-        required: true
+        type: Sequelize.STRING,
+        allowNull: false,
     },
     isAdmin: {
-        type: Boolean,
-        required: true,
-        default: false
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
     }
 });
-// hash user password before saving into database
-UserSchema.pre('save', function(next){
-    this.password = bcrypt.hashSync(this.password, saltRounds);
-    next();
-});
-module.exports = mongoose.model('User', UserSchema);
+

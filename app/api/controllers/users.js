@@ -1,12 +1,13 @@
 const userModel = require('../models/users');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const saltRounds = 10;
 
 module.exports = {
     create: function(req, res, next) {
 
         userModel.create({
-            name: req.body.name, email: req.body.email, password: req.body.password, telefone: req.body.telefone, cpf: req.body.cpf
+            name: req.body.name, email: req.body.email, password: bcrypt.hashSync(req.body.password, saltRounds), telefone: req.body.telefone, cpf: req.body.cpf
         }, function (err, result) {
             if (err)
                 next(err);

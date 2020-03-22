@@ -1,7 +1,12 @@
-//Set up mongoose connection
-const mongoose = require('mongoose');
-const mongoDB = 'mongodb://localhost/node_rest_api';
+//MYSQL
+const Sequelize = require('sequelize')
+const sequelize = new Sequelize('teste', 'root', 'melhorenvio',{
+    host: 'localhost',
+    dialect: 'mysql'
+});
 
-mongoose.connect(mongoDB);
-mongoose.Promise = global.Promise;
-module.exports = mongoose;
+sequelize.authenticate().then(function () {
+    console.log('conectado com sucesso!');
+}).catch(function (err) {
+    console.log(("falha ao conectar" + err));
+});

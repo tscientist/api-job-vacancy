@@ -1,26 +1,27 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-
-const JobSchema = new Schema({
-    jobPosition: {
-        type: String,
-        trim: true,
-        required: true,
-    },
-    description: {
-        type: String,
-        trim: true,
-        required: true,
-    },
-    employer: {
-        type: String,
-        trim: true,
-        required: true,
-    },
-    salary: {
-        type: Number,
-        required: true,
-    }
-});
-
-module.exports = mongoose.model('Job', JobSchema);
+// const Sequelize = require('sequelize')
+// const sequelize = new Sequelize('teste', 'root', 'melhorenvio',{
+//     host: 'localhost',
+//     dialect: 'mysql'
+// });
+//
+// const Job = sequelize.define('job', {
+//     jobPosition: {
+//         type: Sequelize.STRING,
+//         allowNull: false,
+//     },
+//     description: {
+//         type: Sequelize.TEXT,
+//         allowNull: false,
+//     },
+//     employer: {
+//         type: Sequelize.STRING,
+//         // trim: true,
+//         allowNull: false,
+//     },
+//     salary: {
+//         type: Sequelize.FLOAT,
+//         allowNull: false,
+//     }
+// });
+//
+// Job.sync({force: true});
