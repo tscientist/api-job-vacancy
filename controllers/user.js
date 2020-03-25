@@ -13,7 +13,7 @@ module.exports = {
             .then(user => res.status(201).send(user))
             .catch(err => res.status(400).send(err));
     },
-    authenticate(request, response) {
+    login(request, response) {
         const email = request.body.email
         const password = request.body.password;
         const hash = bcrypt.hashSync(password, 10);
@@ -25,36 +25,38 @@ module.exports = {
                     email: email
                 }
             }).then(function (dbUser) {
-                if (!dbUser) {
-                    return done(null, false, {
-                        message: "Incorrect email."
-                    });
-                } else if (!dbUser.validPassword(password)) {
-                    return done(null, false, {
-                        message: "Incorrect password."
+                if (!dbUser || !dbUser.validPassword(password)) {
+                    return response.json({
+                        "data":"Incorrect email or password."
                     });
                 }
-                return response.redirect('/api/profile').send(dbUser);
-                // return response.redi(201).send(dbUser);
 
+                request.session.loggedin = true;
+                request.session.email = email;
+                request.session.id = dbUser.id;
+
+                response.redirect('/api/profile/'+ dbUser.id);
             })
         }
-    }
+    },
 
-        //     'SELECT * FROM users WHERE email = ? AND password = ?', [email, dcryptPassword], function(error, results, fields) {
-        //         if (results.length > 0) {
-        //             request.session.loggedin = true;
-        //             request.session.email = email;
-        //             response.redirect('/api/profile');
-        //         } else {
-        //             response.send('Incorrect email and/or Password!');
-        //         }
-        //         response.end();
-        //     });
-        // } else {
-        //     response.send('Please enter email and Password!');
-        //     response.end();
-        // }
+    profile (request, response){
+        console.log(request.session.email)
+        db.User.findOne({
+            where: {
+                email: request.session.email
+            }
+        }).then(function (dbUser) {
+            if (request.params.id == dbUser.id){
+                console.log(request.params.id);
+                response.send('Welcome back, ' + dbUser.name + '!');
+            }else{
+                res.json({status:"denied"});
+            }
+        }).catch(
+            err => response.status(400).send(err)
+        );
     }
+}
 
 
