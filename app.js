@@ -30,6 +30,7 @@ models.sequelize.sync().then(function () {
 });
 
 require('./routes/user')(app);
+require('./routes/job')(app);
 
 const port = parseInt(process.env.PORT, 10) || 8000;
 app.set('port', port);

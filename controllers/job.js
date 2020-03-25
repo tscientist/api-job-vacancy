@@ -1,6 +1,22 @@
 const Job = require('../models').Job;
 
 module.exports = {
+    create(req, res) {
+        if (req.session.admin === 0) {
+            res.json({status:"denied"});
+            res.redirect('/profile/'+ req.session.userId);
+        }
+        return Job
+            .create({
+                position: req.body.designation,
+                description: req.body.description,
+                companyId: req.session.userId,
+                salary: req.body.salary
+            })
+            .then(job => res.status(201).send(job))
+            .catch(err => res.status(400).send(err));
+    },
+
     getAll(req, res) {
         Job.find({})
         .then(jobs => {

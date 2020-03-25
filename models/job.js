@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Job = sequelize.define('Job', {
-    designation: {
+    position: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Please enter the job description'
         }
       }
+    },
+    companyId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
     salary: {
       type: DataTypes.FLOAT,

@@ -1,10 +1,10 @@
-const Job = require('../controllers').Job;
+const jobController = require('../controllers').job;
 
 module.exports = (app) => {
-    // app.post('/api/:userId/jobUser', Job.create)
-    app.get('/api/jobsList', Job.getAll);
-    // app.get('/:jobId', jobsController.getById);
-    // app.put('/:userId/:jobId', jobsController.updateById);
-    // router.delete('/:jobId', jobsController.deleteById);
+
+    // app.get('/jobsList', jobController.getAll);
+
+    app.post('/admin/create', jobController.create)
+
 };
 
