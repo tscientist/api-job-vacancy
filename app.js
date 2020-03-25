@@ -1,10 +1,8 @@
-const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const http = require('http');
 const session = require('express-session');
-var MemoryStore = require('memorystore')(session);
 
 // Set up the express app
 const app = express();
@@ -12,15 +10,12 @@ const app = express();
 
 app.use(logger('dev'));
 app.use(session({
-    cookie: { maxAge: 300000 },
-    store: new MemoryStore({
-        checkPeriod: 300000 // prune expired entries every 24h
-    }),
+    cookie: { maxAge: (600000*2),
+        secure: false
+    },
     secret: 'keyboard cat'
 }))
 
-
-// Parse incoming requests data (https://github.com/expressjs/body-parser)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -35,10 +30,6 @@ models.sequelize.sync().then(function () {
 });
 
 require('./routes/user')(app);
-// Setup a default catch-all route that sends back a welcome message in JSON format.
-// app.get('*', (req, res) => res.status(200).send({
-//     message: 'Welcome to the beginning of nothingness.',
-// }));
 
 const port = parseInt(process.env.PORT, 10) || 8000;
 app.set('port', port);

@@ -56,6 +56,16 @@ module.exports = {
         }).catch(
             err => response.status(400).send(err)
         );
+    },
+
+    logout (req,res) {
+        req.session.destroy((err) => {
+            if(err) {
+                return console.log(err);
+            }
+            res.send('Logout');
+            // res.redirect('/jobs');
+        });
     }
 }
 

@@ -9,4 +9,6 @@ module.exports = (app) => {
     app.post('/api/login', userController.login);
 
     app.get('/api/profile/:id', userController.profile);
+
+    app.get('/api/logout', userController.logout);
 };
