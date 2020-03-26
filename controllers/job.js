@@ -18,24 +18,24 @@ module.exports = {
         res.redirect('/profile/'+ req.session.userId);
     },
 
-    getAll(req, res) {
-        Job.findAll({})
-        .then(jobs => {
-            let jobsList = [];
-
-            for (let job of jobs) {
-                jobsList.push({id: job._id, name: job.name, released_on: job.released_on});
-            }
-            return res.json({data: {jobs: jobsList}});
-        })
-        .catch(err => {
-            return err;
-        })
-    },
-
-    index (req,res) {
+    index(req,res) {
         Job.findAll()
             .then((job) => {
+                return res.status(200).json(job)
+            })
+            .catch((error) => {
+                return res.status(400).json(error)
+        });
+    },
+
+    showJob(req, res) {
+        Job.findOne({
+            where: {
+                id: req.params.jobId
+            }
+        })
+            .then((job) => {
+                console.log(job)
                 return res.status(200).json(job)
             })
             .catch((error) => {
@@ -45,16 +45,6 @@ module.exports = {
 }
 
 // module.exports = {
-//     getById: function(req, res, next) {
-//         console.log(req.body);
-//         jobModel.findById(req.params.jobId, function(err, jobInfo){
-//             if (err) {
-//                 next(err);
-//             } else {
-//                 res.json({status:"success", message: "Job found!!!", data:{jobs: jobInfo}});
-//             }
-//         });
-//     },
 //     updateById: function(req, res, next) {
 //         jobModel.findByIdAndUpdate(req.params.jobId,{name:req.body.name}, function(err, jobInfo){
 //             if(err)
