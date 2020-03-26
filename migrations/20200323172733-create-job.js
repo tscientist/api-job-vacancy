@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      designation: {
+      position: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -16,13 +16,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      createdAt: {
+      salary: {
+        type: Sequelize.FLOAT,
         allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -32,6 +28,14 @@ module.exports = {
           key: 'id',
           as: 'userId'
         },
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       },
     });
   },

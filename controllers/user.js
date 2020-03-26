@@ -33,38 +33,30 @@ module.exports = {
 
                 request.session.loggedin = true;
                 request.session.email = email;
-                request.session.id = dbUser.id;
+                request.session.userId = dbUser.id;
+                request.session.admin = dbUser.isAdmin;
 
-                response.redirect('/api/profile/'+ dbUser.id);
+                response.redirect('/profile/'+ dbUser.id);
             })
         }
     },
 
     profile (request, response){
-        console.log(request.session.email)
-        db.User.findOne({
-            where: {
-                email: request.session.email
-            }
-        }).then(function (dbUser) {
-            if (request.params.id == dbUser.id){
-                console.log(request.params.id);
-                response.send('Welcome back, ' + dbUser.name + '!');
-            }else{
-                res.json({status:"denied"});
-            }
-        }).catch(
-            err => response.status(400).send(err)
-        );
+        if (request.params.id == request.session.userId) {
+            console.log(request.params.id);
+            response.send('Welcome back, ' + request.session.email + '!');
+        } else {
+            response.json({status:"denied"});
+        }
     },
 
     logout (req,res) {
         req.session.destroy((err) => {
-            if(err) {
+            if (err) {
                 return console.log(err);
             }
-            res.send('Logout');
-            // res.redirect('/jobs');
+            // res.send('Logout');
+            res.redirect('/');
         });
     }
 }

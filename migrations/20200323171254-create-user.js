@@ -15,6 +15,10 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
         allowNull: false,
+        validate: {
+          isEmail : true
+        },
+        unique: true
       },
       password: {
         type: Sequelize.STRING,
@@ -27,6 +31,7 @@ module.exports = {
       cpf: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
       },
       isAdmin: {
         type: Sequelize.INTEGER,
@@ -45,4 +50,5 @@ module.exports = {
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('Users');
   }
+
 };

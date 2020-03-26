@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Job = sequelize.define('Job', {
-    designation: {
+    position: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     salary: {
       type: DataTypes.FLOAT,
       allowNull: false,
@@ -27,8 +31,10 @@ module.exports = (sequelize, DataTypes) => {
   Job.associate = function(models) {
     Job.belongsTo(models.User,{
       foreignKey: 'userId',
+      allowNull: false,
       onDelete: 'CASCADE',
-    });
+      as: 'jobs',
+  });
   };
   return Job;
 };
