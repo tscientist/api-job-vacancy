@@ -2,46 +2,48 @@ const Job = require('../models').Job;
 
 module.exports = {
     create(req, res) {
-        if (req.session.admin === 0) {
-            res.json({status:"denied"});
-            res.redirect('/profile/'+ req.session.userId);
+        if (req.session.admin === 1) {
+            return Job
+                .create({
+                    position: req.body.designation,
+                    description: req.body.description,
+                    userId: req.session.userId,
+                    salary: req.body.salary
+                })
+                .then(job => res.status(201).send(job))
+                .catch(err => res.status(400).send(err));
         }
-        return Job
-            .create({
-                position: req.body.designation,
-                description: req.body.description,
-                companyId: req.session.userId,
-                salary: req.body.salary
-            })
-            .then(job => res.status(201).send(job))
-            .catch(err => res.status(400).send(err));
+
+        res.json({status:"denied"});
+        res.redirect('/profile/'+ req.session.userId);
     },
 
     getAll(req, res) {
-        Job.find({})
+        Job.findAll({})
         .then(jobs => {
             let jobsList = [];
 
             for (let job of jobs) {
                 jobsList.push({id: job._id, name: job.name, released_on: job.released_on});
             }
-            return res.json({status: "success", message: "Jobs list found!!!", data: {jobs: jobsList}});
+            return res.json({data: {jobs: jobsList}});
         })
         .catch(err => {
             return err;
         })
+    },
+
+    index (req,res) {
+        Job.findAll()
+            .then((job) => {
+                return res.status(200).json(job)
+            })
+            .catch((error) => {
+                return res.status(400).json(error)
+        });
     }
 }
 
-// create(req, res) {
-//     return Job
-//         .create({
-//             name: req.body.name, email: req.body.email, password: bcrypt.hashSync(req.body.password, saltRounds),
-//             phoneNumber: req.body.phoneNumber, cpf: req.body.cpf, isAdmin: req.body.isAdmin
-//         })
-//         .then(job => res.status(201).send(user))
-//         .catch(err => res.status(400).send(err));
-// },
 // module.exports = {
 //     getById: function(req, res, next) {
 //         console.log(req.body);
@@ -71,13 +73,5 @@ module.exports = {
 //             }
 //         });
 //     },
-//     create: function(req, res, next) {
-//         jobModel.create({ name: req.body.name, released_on: req.body.released_on }, function (err, result) {
-//             if (err)
-//                 next(err);
-//             else
-//                 res.json({status: "success", message: "Job added successfully!!!", data: null});
-//
-//         });
-//     },
+
 // }

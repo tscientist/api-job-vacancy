@@ -42,11 +42,11 @@ module.exports = {
     },
 
     profile (request, response){
-        if (request.params.id == dbUser.id) {
+        if (request.params.id == request.session.userId) {
             console.log(request.params.id);
-            response.send('Welcome back, ' + dbUser.name + '!');
+            response.send('Welcome back, ' + request.session.email + '!');
         } else {
-            res.json({status:"denied"});
+            response.json({status:"denied"});
         }
     },
 
@@ -55,8 +55,8 @@ module.exports = {
             if (err) {
                 return console.log(err);
             }
-            res.send('Logout');
-            // res.redirect('/jobs');
+            // res.send('Logout');
+            res.redirect('/');
         });
     }
 }

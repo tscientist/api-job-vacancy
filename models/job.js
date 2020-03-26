@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    companyId: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -31,8 +31,10 @@ module.exports = (sequelize, DataTypes) => {
   Job.associate = function(models) {
     Job.belongsTo(models.User,{
       foreignKey: 'userId',
+      allowNull: false,
       onDelete: 'CASCADE',
-    });
+      as: 'jobs',
+  });
   };
   return Job;
 };
