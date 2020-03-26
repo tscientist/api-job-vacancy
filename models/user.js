@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
         User.hasMany(models.Job, {
             foreignKey: 'userId',
             allowNull: false,
-            as: 'jobs',
+            as: 'users',
         });
     };
 
