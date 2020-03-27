@@ -2,20 +2,26 @@ const User = require('../models').User;
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const db = require('../models');
+const { cpf } = require('cpf-cnpj-validator');
 
 module.exports = {
     create(req, res) {
-        return User
-            .create({
-                name: req.body.name, email: req.body.email, password: bcrypt.hashSync(req.body.password, saltRounds),
-                phoneNumber: req.body.phoneNumber, cpf: req.body.cpf, isAdmin: req.body.isAdmin
-            })
-            .then(user => res.status(201).send(user))
-            .catch(err => res.status(400).send(err));
+        if  (cpf.isValid(req.body.cpf)) {
+            return User
+                .create({
+                    name: req.body.name, email: req.body.email, password: bcrypt.hashSync(req.body.password, saltRounds),
+                    phoneNumber: req.body.phoneNumber, cpf: req.body.cpf, isAdmin: req.body.isAdmin
+                })
+                .then(user => res.status(201).send(user))
+                .catch(err => res.status(400).send(err));
+        }
+        return res.status(400).json({
+            "error": "Invalid CPF"
+        })
     },
-    login(request, response) {
-        const email = request.body.email
-        const password = request.body.password;
+    login(req, res) {
+        const email = req.body.email
+        const password = req.body.password;
         const hash = bcrypt.hashSync(password, 10);
         const dcryptPassword = bcrypt.compareSync(password, hash); // this one was incorrect
 
@@ -26,38 +32,35 @@ module.exports = {
                 }
             }).then(function (dbUser) {
                 if (!dbUser || !dbUser.validPassword(password)) {
-                    return response.json({
+                    return res.json({
                         "data":"Incorrect email or password."
                     });
                 }
 
-                request.session.loggedin = true;
-                request.session.email = email;
-                request.session.userId = dbUser.id;
-                request.session.admin = dbUser.isAdmin;
+                req.session.loggedin = true;
+                req.session.email = email;
+                req.session.userId = dbUser.id;
+                req.session.admin = dbUser.isAdmin;
 
-                response.redirect('/profile/'+ dbUser.id);
+                res.redirect('/profile/'+ dbUser.id);
             })
         }
     },
 
-    profile (request, response){
-        if (request.params.id == request.session.userId) {
-            console.log(request.params.id);
-            response.send('Welcome back, ' + request.session.email + '!');
+    profile (req, res){
+        if (req.params.id === req.session.userId) {
+            res.status(201).send(user);
         } else {
-            response.json({status:"denied"});
+            res.status(400).json({
+                "error":"denied"
+            });
         }
     },
 
     logout (req,res) {
-        req.session.destroy((err) => {
-            if (err) {
-                return console.log(err);
-            }
-            // res.send('Logout');
-            res.redirect('/');
-        });
+        req.session.destroy()
+            .then(res.redirect('/'))
+            .catch(err => res.status(400).send(err));
     }
 }
 
