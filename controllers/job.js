@@ -5,7 +5,7 @@ module.exports = {
         if (req.session.admin === 1) {
             return Job
                 .create({
-                    position: req.body.designation,
+                    position: req.body.position,
                     description: req.body.description,
                     userId: req.session.userId,
                     salary: req.body.salary
@@ -35,7 +35,6 @@ module.exports = {
             }
         })
             .then((job) => {
-                console.log(job)
                 return res.status(200).json(job)
             })
             .catch((error) => {

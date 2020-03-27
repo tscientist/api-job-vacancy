@@ -30,9 +30,10 @@ module.exports = {
       },
       cpf: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
         unique: true,
       },
+
       isAdmin: {
         type: Sequelize.INTEGER,
         allowNull: false,

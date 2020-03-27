@@ -34,6 +34,20 @@ module.exports = {
                 return res.status(400).json(error)
             });
     },
+    showCandidature(req, res) {
+        Candidature.findOne({
+            where: {
+                candidatureId : req.params.candidatureId
+            }
+        })
+            .then((candidature) => {
+                return res.status(200).json(candidature)
+            })
+            .catch((error) => {
+                return res.status(400).json(error)
+            });
+
+    },
 
     /**
      * TODO: criar função buscar job no banco
