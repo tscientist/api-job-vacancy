@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             onDelete: 'CASCADE',
             as: 'jobs',
-          });
+        });
         Candidature.hasMany(models.Comment, {
             foreignKey: 'candidatureId',
             allowNull: false,

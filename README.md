@@ -1,4 +1,5 @@
 # node-api-pagamentos
 
-npx sequelize-cli db:migrate:undo - derrubar a ultima tabela criadales ne
+npm install
+npx sequelize-cli db:migrate:undo:all - derrubar tabelas
 npx sequelize-cli db:migrate - criar tabelas

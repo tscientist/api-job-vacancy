@@ -12,6 +12,8 @@ module.exports = (app) => {
 
     app.get('/:jobId/apply', candidatureController.create)
 
+    app.get('/:jobId/delete', jobController.delete)
+
     app.get('/:jobId/candidatures', candidatureController.allCandidatures)
 
     app.get('/:candidatureId', candidatureController.showCandidature)
