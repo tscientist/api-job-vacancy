@@ -25,7 +25,6 @@
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "memorystore": "^1.6.2",
-    "morgan": "^1.10.0",
     "mysql2": "^2.1.0",
     "sequelize": "^5.21.5"
   },

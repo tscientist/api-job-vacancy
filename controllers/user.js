@@ -1,76 +1,195 @@
 const User = require('../models').User;
+const Candidature = require('../models').Candidature;
+const Job = require('../models').Job;
+const Sessions = require('../models').Sessions;
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const {cpf} = require('cpf-cnpj-validator');
+const {cnpj} = require('cpf-cnpj-validator');
 
 module.exports = {
     create(req, res) {
-        if (cpf.isValid(req.body.cpf)) {
+        if (cpf.isValid(req.body.document) || cnpj.isValid(req.body.document)) {
             return User
                 .create({
                     name: req.body.name,
                     email: req.body.email,
                     password: bcrypt.hashSync(req.body.password, saltRounds),
                     phoneNumber: req.body.phoneNumber,
-                    cpf: req.body.cpf,
-                    isAdmin: req.body.isAdmin
+                    document: req.body.document,
+                    isAdmin: req.body.isAdmin,
+                    address: req.body.address,
+                    description: req.body.description
                 })
                 .then(user => res.status(201).send(user))
                 .catch(err => res.status(400).send(err));
         }
         return res.status(400).json({
-            "error": "Invalid CPF"
+            "error": "Invalid document"
         })
     },
     login(req, res) {
-        const email = req.body.email
-        const password = req.body.password;
-        const hash = bcrypt.hashSync(password, 10);
-        const dcryptPassword = bcrypt.compareSync(password, hash); // this one was incorrect
-
-        if (email && password) {
+        if (req.body.email && req.body.password) {
             User.findOne({
                 where: {
-                    email: email
+                    email: req.body.email
                 }
-            }).then(function (dbUser) {
-                if (!dbUser || !dbUser.validPassword(password)) {
+            }).then(function (user) {
+                if (!user || !user.validPassword(req.body.password)) {
                     return res.json({
-                        "data": "Incorrect email or password."
+                        "error": "Incorrect email or password."
                     });
                 }
 
-                req.session.loggedin = true;
-                req.session.email = email;
-                req.session.userId = dbUser.id;
-                req.session.admin = dbUser.isAdmin;
-
-                res.redirect('/profile/' + dbUser.id);
+                Sessions.create({
+                    token: bcrypt.hashSync(user.email + user.id + new Date().getTime().toString(), saltRounds),
+                    userId: user.id
+                })
+                    .then(session => {
+                        return res.status(200).json({token: session.token});
+                    })
             })
+                .catch(() => res.status(400).json({
+                        "error": "Incorrect email or password"
+                    })
+                );
         }
     },
-
     profile(req, res) {
-        if (req.params.id == req.session.userId) {
-            return User.findOne({
-                where: {
-                    id: req.params.id
-                }
+        return User.findOne({
+            where: {
+                id: req.session.userId
+            }
+        })
+            .then(user => res.status(200).send(user))
+            .catch(err => res.status(400).send(err));
+    },
+    findUser(req, res) {
+        User.findOne({
+            where: {
+                name: req.params.name
+            }
+        })
+            .then((user) => {
+                if (user == null) return res.status(404).json({
+                    "error": "User not found"
+                })
+                return res.status(200).json({
+                    name: user.name,
+                    email: user.email,
+                    phoneNumber: user.phoneNumber,
+                    description: user.description
+                })
             })
-                .then(user => res.status(201).send(user))
-                .catch(err => res.status(400).send(err));
-        }
+            .catch((err) => {
+                return res.status(400).json(err)
+            })
+    },
+    candidatures(req, res) {
+        if (!req.session.userId) return res.redirect('/')
 
-        res.status(400).json({
-            "error": "denied"
-        });
+        let jobsList = [];
+        Candidature.findAll({
+            where: {
+                userId: req.session.userId
+            }
+        })
+            .then((candidatures) => {
+                for (let candidature of candidatures) {
+                    console.log(candidatures)
+                }
+                Job.findOne({
+                    where: {
+                        id: candidature.jobId,
+                    }
+                })
+                    .then((job) => {
+                        jobsList.push(job)
+                    })
+                return res.status(200).json(jobsList)
+            })
+            .catch((err) => {
+                return res.status(400).json(err)
+            });
+
+        return res.redirect('/profile')
+
+        // function(err, jobs){
+        //     if (err){
+        //         next(err);
+        //     } else{
+        //         for (let job of jobs) {
+        //             jobsList.push({id: job._id, name: job.name, released_on: job.released_on});
+        //         }
+        //         res.json({status:"success", message: "Jobs list found!!!", data:{jobs: jobsList}});
+        //
+        //     }
+    },
+    update(req, res) {
+        if (!req.session.userId) return res.redirect('/')
+
+        User.findOne({
+            where: {
+                id: req.session.userId
+            }
+        })
+            .then(user => {
+                allowedParams = [
+                    "name",
+                    "password",
+                    "phoneNumber",
+                    "address",
+                    "description"
+                ];
+
+                for (param in req.body) {
+                    if (allowedParams.includes(param)) {
+                        if (param == "password") {
+                            user[param] = bcrypt.hashSync(req.body[param], saltRounds)
+                        } else {
+                            user[param] = req.body[param]
+                        }
+                    }
+                }
+                user.save()
+                return res.redirect('/profile')
+            });
+
+        return res.status(406)
+    },
+    delete(req, res) {
+        User.findOne({
+            where: {
+                id: req.session.userId
+            }
+        })
+            .then(function (user) {
+                // if (!req.session.userId) return res.redirect('/')
+
+                user.destroy(err => {
+                    if (err) return res.send(err)
+                    return res.redirect('/')
+                })
+            })
+            .catch((err) => {
+                return res.status(400).json(err)
+            });
     },
 
     logout(req, res) {
-        req.session.destroy()
-            .then(res.redirect('/'))
-            .catch(err => res.status(400).send(err));
+        Sessions.destroy({
+            where: {
+                userId: req.session.userId
+            }
+        });
+
+        req.session.destroy();
+
+        return res.status(401).json({
+            error: "You have been logged out"
+        })
     }
-}
+};
+
 
 

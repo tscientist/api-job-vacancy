@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
                 validate: {
                     notNull: {
                         msg: 'Please enter your name'
-                    }
+                    },
+                    len: [5, 60]
                 }
             },
             email: {
@@ -27,8 +28,9 @@ module.exports = (sequelize, DataTypes) => {
             phoneNumber: {
                 type: DataTypes.STRING,
                 allowNull: false,
+                len: [8, 15]
             },
-            cpf: {
+            document: {
                 type: DataTypes.STRING,
                 allowNull: false,
                 unique: true
@@ -36,6 +38,14 @@ module.exports = (sequelize, DataTypes) => {
             isAdmin: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
+            },
+            address: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            description: {
+                type: DataTypes.STRING,
+                allowNull: true,
             }
         },
         {});
@@ -45,6 +55,11 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'userId',
             allowNull: false,
             as: 'users',
+        });
+        User.hasMany(models.Sessions, {
+            foreignKey: 'userId',
+            allowNull: false,
+            as: 'tokens',
         });
     };
 

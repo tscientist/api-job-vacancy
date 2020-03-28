@@ -11,6 +11,12 @@ module.exports = {
             name: {
                 type: Sequelize.STRING,
                 allowNull: false,
+                validate: {
+                    notNull: {
+                        msg: 'Please enter your name'
+                    },
+                    len: [5, 60]
+                }
             },
             email: {
                 type: Sequelize.STRING,
@@ -28,15 +34,22 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            cpf: {
+            document: {
                 type: Sequelize.STRING,
-                allowNull: true,
+                allowNull: false,
                 unique: true,
             },
-
             isAdmin: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
+            },
+            address: {
+                type: Sequelize.STRING,
+                allowNull: true,
+            },
+            description: {
+                type: Sequelize.STRING,
+                allowNull: true,
             },
             createdAt: {
                 allowNull: false,

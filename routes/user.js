@@ -1,11 +1,22 @@
 const userController = require('../controllers').user;
+const middlewares = require("../middlewares")
 
 module.exports = (app) => {
+
     app.post('/createUser', userController.create)
 
     app.post('/login', userController.login);
 
-    app.get('/profile/:id', userController.profile);
+    app.get('/profile', middlewares.isAuthenticated, userController.profile);
 
-    app.get('/logout', userController.logout);
+    app.get('/users/:name', middlewares.isAuthenticated, userController.findUser)
+
+    app.get('/logout', middlewares.isAuthenticated, userController.logout);
+
+    app.get('/profile/applications', middlewares.isAuthenticated, userController.candidatures);
+
+    app.post('/profile/update', middlewares.isAuthenticated, userController.update);
+
+    app.get('/profile/delete', middlewares.isAuthenticated, userController.update);
+
 };

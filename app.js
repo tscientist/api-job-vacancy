@@ -1,21 +1,16 @@
 const express = require('express');
-const logger = require('morgan');
 const bodyParser = require('body-parser');
 const http = require('http');
 const session = require('express-session');
 
 const app = express();
 
-app.use(logger('dev'));
-app.use(session({
-    cookie: { maxAge: (600000*2),
-        secure: false
-    },
-    secret: 'keyboard cat'
-}))
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({
+    secret: 'keyboard cat',
+    cookie: { maxAge: 86400000 }
+}))
 
 //Models
 const models = require('./models');
