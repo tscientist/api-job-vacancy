@@ -11,14 +11,20 @@ module.exports = {
             position: {
                 type: Sequelize.STRING,
                 allowNull: false,
+                validate: {
+                    notNull: {
+                        msg: 'Please enter the job position'
+                    }
+                }
             },
             description: {
                 type: Sequelize.STRING,
                 allowNull: false,
-            },
-            salary: {
-                type: Sequelize.FLOAT,
-                allowNull: false,
+                validate: {
+                    notNull: {
+                        msg: 'Please enter the job description'
+                    }
+                }
             },
             userId: {
                 type: Sequelize.INTEGER,
@@ -28,6 +34,22 @@ module.exports = {
                     key: 'id',
                     as: 'userId'
                 },
+            },
+            salary: {
+                type: Sequelize.FLOAT,
+                allowNull: false,
+            },
+            workload: {
+                type: Sequelize.FLOAT,
+                allowNull: true,
+            },
+            benefits: {
+                type: Sequelize.STRING,
+                allowNull: true,
+            },
+            companyAddress: {
+                type: Sequelize.STRING,
+                allowNull: true,
             },
             createdAt: {
                 allowNull: false,

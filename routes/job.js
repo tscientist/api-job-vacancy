@@ -1,26 +1,30 @@
 const jobController = require('../controllers').job;
 const candidatureController = require('../controllers').candidature;
 const commentController = require('../controllers').comment;
+const middlewares = require("../middlewares")
 
 module.exports = (app) => {
 
     app.get('/', jobController.index);
 
-    app.post('/admin/create', jobController.create)
+    app.post('/admin/create', middlewares.isAuthenticated, jobController.create)
 
-    app.get('/:jobId', jobController.showJob)
+    app.get('/job/:jobId', jobController.showJob)
 
-    app.get('/:jobId/apply', candidatureController.create)
+    app.get('/job/:position', jobController.findJob)
 
-    app.get('/:jobId/delete', jobController.delete)
+    app.get('/:jobId/apply', middlewares.isAuthenticated, candidatureController.create)
 
-    app.get('/:jobId/candidatures', candidatureController.allCandidatures)
+    app.get('/job/:jobId/delete', middlewares.isAuthenticated, jobController.delete)
 
-    app.get('/:candidatureId', candidatureController.showCandidature)
+    app.get('/:jobId/applications', middlewares.isAuthenticated, candidatureController.allCandidatures)
 
-    app.post('/:candidatureId/comment', commentController.create)
+    app.get('/candidature/:candidatureId', middlewares.isAuthenticated, candidatureController.showCandidature)
 
-    app.get('/:candidatureId/comments', commentController.allComments)
+    app.post('/:candidatureId/comment', middlewares.isAuthenticated, commentController.create)
 
+    app.get('/:candidatureId/comments', middlewares.isAuthenticated, commentController.allComments)
+
+    app.get('/:candidatureId/delete', middlewares.isAuthenticated, candidatureController.delete)
 };
 

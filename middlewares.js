@@ -6,8 +6,7 @@ module.exports = {
         if (!req.headers.token) {
             return res.status(401).json({
                 error: "Please Log in/Register to view this page"
-            })
-                ;
+            });
         }
         return Sessions.findOne({
             where: {
@@ -28,7 +27,7 @@ module.exports = {
                         return next()
                     })
                 }
-                req.session.destroy();
+                // req.session.destroy();
 
                 return res.status(401).json({
                     error: "Please Log in/Register to view this page"
