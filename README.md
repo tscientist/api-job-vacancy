@@ -16,9 +16,9 @@ It will be saved on the Sessions table and will be deleted when the user logout.
 the API endpoints.
 
 
-##**endpoints da API**
+## **endpoints da API**
 
-####````  {{url}}/createUserr -> ````  
+#### ````  {{url}}/createUserr -> ````  
 
 POST Cadastro - This route is used to create a new user, the user data must be informed and in result the route will
 return the new user. 
@@ -67,7 +67,7 @@ Response:
     }
 
 
-####````{{url}}/login ->````
+#### ````{{url}}/login ->````
 
 POST login - It must be informed on the request body the user email and password and will return the token of the session.
 It is necessary add the token on every Authenticated route header. The token will expires when the user logout or when a new
@@ -99,7 +99,7 @@ Response when the user inform the wrong email or password:
         "error": "Incorrect email or password."
     }
     
-####````{{url}}/profile ->````
+#### ````{{url}}/profile ->````
 
 GET Profile - We use the express-session library to save the user id and isAdmin attributes on variables that we can use 
 in any file and it is related with the authenticated user. It will return the authenticated user data.
@@ -123,7 +123,7 @@ Response:
         "updatedAt": "2020-03-29T01:41:04.000Z"
     } 
         
-####````{{url}}/logout ->````
+#### ````{{url}}/logout ->````
 
 GET Logout - The logout function find the Session object int he session table and destroy it and destroy the information saved
 in the req.session cookie. 
@@ -137,7 +137,7 @@ Response:
         "message": "You have been logged out"
     }
 
-####````{{url}}/:jobId/apply ->````
+#### ````{{url}}/:jobId/apply ->````
 
 GET Apply - Create a Candidature object witch is associated with Job, a job can have many candidatures. The job id must be informed
 on the params session. It will return the Candidature, the adminId attributes is from the user who created the Job.
@@ -159,7 +159,7 @@ Response:
         "createdAt": "2020-03-29T03:08:37.747Z"
     }
     
-####````{{url}}/candidature/:candidatureId/delete````
+#### ````{{url}}/candidature/:candidatureId/delete````
 
 GET Remove candidature - Sends the id of the candidature through the params and then delete the Candidature from the database. 
 Return a message of success. Only the owner of the application can delete it.
@@ -176,7 +176,7 @@ Response:
         "message": "Candidature deleted"
     }
 
-####````{{url}}/profile/update -> ````
+#### ````{{url}}/profile/update -> ````
         
 POST Update user - The request must contain at least one of the attributes of User and the update function um verify witch one is and
 replace then on the authenticated user. Return the user information. The email and document attributes can not be updated
@@ -208,7 +208,7 @@ Response:
         "updatedAt": "2020-03-29T03:43:54.000Z"
     }
     
-####````{{url}}/profile/delete ->````
+#### ````{{url}}/profile/delete ->````
 
 GET Delete user - Destroy in the Users table the authenticated user and return a success message. 
 
@@ -221,7 +221,7 @@ Response:
         "message": "User deleted"
     }
 
-####````{{url}}/ ->````
+#### ````{{url}}/ ->````
 
 GET jobs - Find all Jobs on the db and displays then. The user doesn't need to be authenticated to access this route. 
 
@@ -278,7 +278,7 @@ Response:
         }
     ]        
         
-####````{{url}}/admin/create  ->````
+#### ````{{url}}/admin/create  ->````
 
 POST Create Job -> Only admins (isAdmin flag was set 1) can add jobs in the API, a user can change the isAdmin attribute on the update route
 anytime. This function create a new Job with the attributes received in the request. It must return the new Job.
@@ -316,7 +316,7 @@ Response:
         "createdAt": "2020-03-29T03:50:42.892Z"
     }
     
-####````{{url}}/job/:jobId ->````
+#### ````{{url}}/job/:jobId ->````
 
 GET Find job - Receive a jobId through the params and find it at the db and displays the Job. 
 
@@ -344,7 +344,7 @@ Error response:
         "error": "Job not foud"
     }
 
-####````{{url}}/position/:position -> ````
+#### ````{{url}}/position/:position -> ````
 
 GET Find job by position - Receive a position attribute through the params and find it at the db and displays the Job. 
 
@@ -366,7 +366,7 @@ Response:
         "updatedAt": "2020-03-29T03:50:20.000Z"
     }
 
-####````{{url}}/users/:name ->````
+#### ````{{url}}/users/:name ->````
 
 GET Find user by name - Receive a name attribute through the params and find it at the db and displays SOME of the User information. 
 
@@ -385,7 +385,7 @@ Response:
         "description": null
     }
 
-####````{{url}}/:jobId/candidatures ->````
+#### ````{{url}}/:jobId/candidatures ->````
 
 GET Candidatures -Receive the id of a Job and displays all the Candidatures associated with this Job. A Job can have many
 candidatures. Only the user who created the Job can see the candidatures. 
@@ -418,7 +418,7 @@ Response:
     ]
     
 
-####````{{url}}/candidature/:candidatureId ->````
+#### ````{{url}}/candidature/:candidatureId ->````
 
 GET Show candidature - Receive a candidatureId attribute through the params and find it at the db and displays the candidature. (TODO: also displays the information of the user who applied)
 
@@ -441,7 +441,7 @@ Response:
     
 
 
-####````{{url}}/:candidatureId/comment ->````
+#### ````{{url}}/:candidatureId/comment ->````
 
 POST Create Comment -  This function create a new comment with the attributes received in the request. It must return the new comment. The admin can
 add many comments associated with one Candidature. 
@@ -470,7 +470,7 @@ Response:
         "createdAt": "2020-03-29T04:27:13.093Z"
     }
 
-####````{{url}}/:candidatureId/comments ->````
+#### ````{{url}}/:candidatureId/comments ->````
 
 GET Show comments - Receive a candidatureId attribute through the params and find it at the db and displays all the comments associated with this candidature.
 
@@ -499,7 +499,7 @@ Response:
         }
     ]
 
-####````{{url}}/job/:jobId/delete ->````
+#### ````{{url}}/job/:jobId/delete ->````
 
 GET Delete Job - Receive a jobId attribute through the params and destroy it in the Jobs table.
 
