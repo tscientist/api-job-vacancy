@@ -1,10 +1,14 @@
 # API Job search
 
+Job search API using Node.js, Express framework, sequelize and mysql2. I also used express-session and bycript on the user authentication. 
+
+API of a product that control jobs opportunits and users who can apply to this jobs. Its possible to register users with admin permissions and they will control the system, a user can update his account to admin. You have to login to access the endpoints, you will use the token given to you on the login to access them. Only admins can create jobs opportunity, this jobs must contain a position, a description of the job, the id of the user who wants to create it and the salary. The workload in hours, the list of benefits and the companys address are optional. Users can register using name, email, phoneNumber, document and a password, description and address are optional. Users can apply to more than one job and you can't apply for a job that you created. Admins can comment on the candidatures and only the owner of the job can delete it or see the candidatures. The list of available jobs can be seen without login. Anyone can search for a specific job using the name or the id. Anyone can search for a user and it will displays some of the user info. A user can only see his applications.
+
 **Installation**
-- clone this repository
+- clone this repository and open it
 - create a database on your machine that matches the development in ./config/config-example.json 
-- create and update the config.json file's development object with your own local MYSQL database settings.
-- run ```npm install --save``` 
+- create the config.json file's development object with your own local MYSQL database settings.
+- run ```npm install``` 
 - run ```npx sequelize-cli db:migrate``` 
 - run ```npm start```
 
