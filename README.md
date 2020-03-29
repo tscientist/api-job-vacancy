@@ -4,7 +4,7 @@
 - clone this repository
 - create a database on your machine that matches the development in ./config/config-example.json 
 - create and update the config.json file's development object with your own local MYSQL database settings.
-- run ```npm install``` 
+- run ```npm install --save``` 
 - run ```npx sequelize-cli db:migrate``` 
 - run ```npm start```
 
