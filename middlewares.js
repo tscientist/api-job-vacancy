@@ -22,17 +22,20 @@ module.exports = {
                             id: req.session.userId
                         }
                     }).then(user => {
-                        if (user == null) return res.redirect('/')
+                        if (user == null){
+                            return res.status(401).json({
+                                error: "Please Log in/Register to view this page"
+                            })
+                        }
                         req.session.admin = user.isAdmin
                         return next()
                     })
                 }
-
                 return res.status(401).json({
                     error: "Please Log in/Register to view this page"
                 })
-
             })
             .catch(err => res.status(401).json(err))
+
     }
 };
