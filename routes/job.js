@@ -1,6 +1,7 @@
 const jobController = require('../controllers').job;
 const candidatureController = require('../controllers').candidature;
 const commentController = require('../controllers').comment;
+const userController = require('../controllers').user;
 const middlewares = require("../middlewares")
 
 module.exports = (app) => {
@@ -12,6 +13,8 @@ module.exports = (app) => {
     app.get('/job/:jobId', jobController.showJob)
 
     app.get('/position/:position', jobController.findJob)
+
+    app.get('/users/:name', middlewares.isAuthenticated, userController.findUser)
 
     app.get('/:jobId/candidatures', middlewares.isAuthenticated, candidatureController.allCandidatures)
 

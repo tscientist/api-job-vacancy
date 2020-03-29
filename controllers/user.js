@@ -61,8 +61,11 @@ module.exports = {
                 id: req.session.userId
             }
         })
-            .then(user => res.status(200).send(user))
+            .then(user => {
+                res.status(200).send(user)
+            })
             .catch(err => res.status(400).send(err));
+
     },
     findUser(req, res) {
         User.findOne({
@@ -149,7 +152,7 @@ module.exports = {
         req.session.destroy();
 
         return res.status(401).json({
-            error: "You have been logged out"
+            message: "You have been logged out"
         })
     }
 };
