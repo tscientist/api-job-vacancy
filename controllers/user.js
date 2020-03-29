@@ -61,8 +61,11 @@ module.exports = {
                 id: req.session.userId
             }
         })
-            .then(user => res.status(200).send(user))
+            .then(user => {
+                res.status(200).send(user)
+            })
             .catch(err => res.status(400).send(err));
+
     },
     findUser(req, res) {
         User.findOne({

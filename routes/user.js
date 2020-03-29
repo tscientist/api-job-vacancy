@@ -11,8 +11,6 @@ module.exports = (app) => {
 
     app.get('/profile', middlewares.isAuthenticated, userController.profile);
 
-    app.get('/users/:name', middlewares.isAuthenticated, userController.findUser)
-
     app.get('/logout', middlewares.isAuthenticated, userController.logout);
 
     app.get('/:jobId/apply', middlewares.isAuthenticated, candidatureController.create)
