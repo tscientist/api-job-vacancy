@@ -12,6 +12,16 @@ module.exports = {
                 type: Sequelize.INTEGER,
                 allowNull: false,
             },
+            jobId: {
+                type: Sequelize.INTEGER,
+                onDelete: 'CASCADE',
+                references: {
+                    model: 'Jobs',
+                    key: 'id',
+                    as: 'jobId'
+                },
+                allowNull: false,
+            },
             userId: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
@@ -23,16 +33,6 @@ module.exports = {
             updatedAt: {
                 allowNull: false,
                 type: Sequelize.DATE
-            },
-            jobId: {
-                type: Sequelize.INTEGER,
-                onDelete: 'CASCADE',
-                references: {
-                    model: 'Jobs',
-                    key: 'id',
-                    as: 'jobId'
-                },
-                allowNull: false,
             },
         });
     },

@@ -8,6 +8,15 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
+            candidatureId: {
+                type: Sequelize.INTEGER,
+                onDelete: 'CASCADE',
+                references: {
+                    model: 'Candidatures',
+                    key: 'id',
+                    as: 'candidatureId'
+                },
+            },
             comment: {
                 type: Sequelize.STRING,
                 allowNull: false,
@@ -24,15 +33,6 @@ module.exports = {
             updatedAt: {
                 allowNull: false,
                 type: Sequelize.DATE
-            },
-            candidatureId: {
-                type: Sequelize.INTEGER,
-                onDelete: 'CASCADE',
-                references: {
-                    model: 'Candidatures',
-                    key: 'id',
-                    as: 'candidatureId'
-                },
             },
         });
     },

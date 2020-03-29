@@ -38,9 +38,11 @@ module.exports = {
             }
             })
             .then((job) => {
-            if (job == null)   return res.status(404).json({
-                "error": "Job not foud"
-            })
+            if (job == null) {
+                return res.status(404).json({
+                    "error": "Job not foud"
+                })
+            }
                 return res.status(200).json(job)
             })
             .catch((err) => {

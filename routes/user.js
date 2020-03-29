@@ -17,7 +17,7 @@ module.exports = (app) => {
 
     app.get('/:jobId/apply', middlewares.isAuthenticated, candidatureController.create)
 
-    app.get('/:candidatureId/delete', middlewares.isAuthenticated, candidatureController.delete)
+    app.get('/candidature/:candidatureId/delete', middlewares.isAuthenticated, candidatureController.delete)
 
     app.post('/profile/update', middlewares.isAuthenticated, userController.update);
 

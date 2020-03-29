@@ -3,58 +3,111 @@ const Job = require('../models').Job;
 
 
 module.exports = {
-    /**
-     * TODO: error de job not found
-     * @param req
-     * @param res
-     */
+
     create(req, res) {
-        Job.findOne({
+        return Job.findOne({
             where: {
                 id: req.params.jobId
             }
         })
-            .then(function (job) {
+            .then((job) => {
                 if (job.userId != req.session.userId) {
-                    return Candidature
-                        .create({
-                            jobId: job.id,
-                            adminId: job.userId,
-                            userId: req.session.userId,
+                    return Candidature.findOne({
+                        where: {
+                            userId: req.session.userId
+                        }
+                    })
+                        .then((candidature) => {
+                            if (candidature) {
+                                return res.status(401).json({
+                                    error: "You have already applied for this job"
+                                })
+                            }
+
+                            return Candidature
+                                .create({
+                                    jobId: req.params.jobId,
+                                    adminId: job.userId,
+                                    userId: req.session.userId,
+                                })
+                                .then(candidature => {
+                                    return res.status(201).send(candidature)
+                                })
+                                .catch(err => res.status(400).send(err));
+
                         })
-                        .then(candidature => res.status(201).send(candidature))
                         .catch(err => res.status(400).send(err));
                 }
+                return res.status(401).json({
+                    error: "You cannot apply for your own job"
+                })
             })
-        res.redirect('/' + req.params.jobId)
+            .catch(err => res.status(400).send(err));
     },
     allCandidatures(req, res) {
-        Candidature.findAll({
+        if (req.session.admin != 1) {
+            return res.status(401).json({
+                error: "You don't have permission to access the page you're trying to access"
+            })
+        }
+        return Job.findOne({
             where: {
-                jobId: req.params.jobId
+                id: req.params.jobId,
+                userId: req.session.userId
             }
         })
-            .then((candidature) => {
-                return res.status(200).json(candidature)
+            .then((job) => {
+                return Candidature.findAll({
+                    where: {
+                        jobId: req.params.jobId
+                    }
+                })
+                    .then(function (candidature) {
+                        return res.status(200).send(candidature)
+                    })
+
             })
             .catch((err) => {
                 return res.status(400).json(err)
             });
     },
     showCandidature(req, res) {
-        Candidature.findOne({
+        return Candidature.findOne({
             where: {
-                candidatureId: req.params.candidatureId
+                id: req.params.candidatureId
             }
         })
             .then((candidature) => {
-                if (candidature.adminId == req.session.userId) {
-                    return res.status(200).json(candidature)
+                if (candidature.adminId != req.session.userId) {
+                    return res.redirect('/' + candidature.jobId)
                 }
-                return res.redirect('/' + candidature.jobId)
+                return res.status(200).json(candidature)
             })
             .catch((err) => {
                 return res.status(400).json(err)
             });
-    }
+    },
+    delete(req, res) {
+        return Candidature.findOne({
+            where: {
+                userId: req.session.userId
+            }
+        })
+            .then((candidature) => {
+                if (candidature == null) {
+                    return res.status(404).json({
+                        "error": "Candidature not foud"
+                    })
+                }
+
+                candidature.destroy()
+
+                return res.status(200).json({
+                    "message": "Candidature deleted"
+                })
+            })
+            .catch((err) => {
+                return res.status(400).json(err)
+            })
+    },
 }
