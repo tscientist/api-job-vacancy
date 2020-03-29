@@ -13,7 +13,7 @@ module.exports = {
     },
     create(req, res) {
         if (req.session.admin != 1){
-            res.status(401).json({
+            return res.status(401).json({
                 error: "You don't have permission to access the page you're trying to access"
             })
         }
@@ -68,15 +68,27 @@ module.exports = {
     },
 
     delete(req, res) {
-        Job.destroy({
+        return Job.findOne({
             where: {
                 id: req.params.jobId,
-                userId:req.session.userId
+                userId: req.session.userId
             }
-        });
-
-        return res.status(200).json({
-            "message": "Job deleted"
         })
-    },
+            .then((job) => {
+                if (job == null) {
+                    return res.status(400).json({
+                        "error": "Something went wrong"
+                    })
+                }
+
+                job.destroy()
+
+                return res.status(200).json({
+                    "message": "Job deleted"
+                })
+            })
+            .catch((err) => {
+                return res.status(400).json(err)
+            })
+    }
 };

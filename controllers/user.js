@@ -85,46 +85,6 @@ module.exports = {
                 return res.status(400).json(err)
             })
     },
-    candidatures(req, res) {
-        if (!req.session.userId) return res.redirect('/')
-
-        let jobsList = [];
-        Candidature.findAll({
-            where: {
-                userId: req.session.userId
-            }
-        })
-            .then((candidatures) => {
-                for (let candidature of candidatures) {
-                    console.log(candidatures)
-                }
-                Job.findOne({
-                    where: {
-                        id: candidature.jobId,
-                    }
-                })
-                    .then((job) => {
-                        jobsList.push(job)
-                    })
-                return res.status(200).json(jobsList)
-            })
-            .catch((err) => {
-                return res.status(400).json(err)
-            });
-
-        return res.redirect('/profile')
-
-        // function(err, jobs){
-        //     if (err){
-        //         next(err);
-        //     } else{
-        //         for (let job of jobs) {
-        //             jobsList.push({id: job._id, name: job.name, released_on: job.released_on});
-        //         }
-        //         res.json({status:"success", message: "Jobs list found!!!", data:{jobs: jobsList}});
-        //
-        //     }
-    },
     update(req, res) {
         if (!req.session.userId) return res.redirect('/')
 
@@ -158,22 +118,25 @@ module.exports = {
         return res.status(406)
     },
     delete(req, res) {
-        User.findOne({
+        return User.findOne({
             where: {
                 id: req.session.userId
             }
         })
-            .then(function (user) {
-                // if (!req.session.userId) return res.redirect('/')
-
-                user.destroy(err => {
-                    if (err) return res.send(err)
-                    return res.redirect('/')
+            .then((user) => {
+                if (user == null) {
+                    return res.status(404).json({
+                        "error": "User not found"
+                    })
+                }
+                user.destroy()
+                return res.status(200).json({
+                    "message": "User deleted"
                 })
             })
             .catch((err) => {
                 return res.status(400).json(err)
-            });
+            })
     },
 
     logout(req, res) {

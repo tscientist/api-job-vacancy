@@ -1,4 +1,6 @@
 const userController = require('../controllers').user;
+const candidatureController = require('../controllers').candidature;
+const jobController = require('../controllers').job;
 const middlewares = require("../middlewares")
 
 module.exports = (app) => {
@@ -13,10 +15,12 @@ module.exports = (app) => {
 
     app.get('/logout', middlewares.isAuthenticated, userController.logout);
 
-    app.get('/profile/applications', middlewares.isAuthenticated, userController.candidatures);
+    app.get('/:jobId/apply', middlewares.isAuthenticated, candidatureController.create)
+
+    app.get('/:candidatureId/delete', middlewares.isAuthenticated, candidatureController.delete)
 
     app.post('/profile/update', middlewares.isAuthenticated, userController.update);
 
-    app.get('/profile/delete', middlewares.isAuthenticated, userController.update);
+    app.get('/profile/delete', middlewares.isAuthenticated, userController.delete);
 
 };

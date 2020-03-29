@@ -11,20 +11,17 @@ module.exports = (app) => {
 
     app.get('/job/:jobId', jobController.showJob)
 
-    app.get('/job/:position', jobController.findJob)
+    app.get('/position/:position', jobController.findJob)
 
-    app.get('/:jobId/apply', middlewares.isAuthenticated, candidatureController.create)
-
-    app.get('/job/:jobId/delete', middlewares.isAuthenticated, jobController.delete)
-
-    app.get('/:jobId/applications', middlewares.isAuthenticated, candidatureController.allCandidatures)
+    app.get('/:jobId/candidatures', middlewares.isAuthenticated, candidatureController.allCandidatures)
 
     app.get('/candidature/:candidatureId', middlewares.isAuthenticated, candidatureController.showCandidature)
+
+    app.get('/job/:jobId/delete', middlewares.isAuthenticated, jobController.delete)
 
     app.post('/:candidatureId/comment', middlewares.isAuthenticated, commentController.create)
 
     app.get('/:candidatureId/comments', middlewares.isAuthenticated, commentController.allComments)
 
-    app.get('/:candidatureId/delete', middlewares.isAuthenticated, candidatureController.delete)
 };
 
