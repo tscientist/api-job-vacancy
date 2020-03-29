@@ -14,7 +14,7 @@ module.exports = {
             }
         })
             .then((candidature) => {
-                if (candidature.adminId == req.session.userId){
+                if (candidature.adminId == req.session.userId) {
                     return Comment
                         .create({
                             candidatureId: req.params.candidatureId,
@@ -30,7 +30,7 @@ module.exports = {
             .catch(err => {
                 return res.status(400).json(err)
             });
-        },
+    },
     allComments(req, res) {
         Candidature.findOne({
             where: {

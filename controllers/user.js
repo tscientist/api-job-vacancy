@@ -152,7 +152,7 @@ module.exports = {
         req.session.destroy();
 
         return res.status(401).json({
-            error: "You have been logged out"
+            message: "You have been logged out"
         })
     }
 };
