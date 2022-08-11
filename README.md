@@ -41,8 +41,8 @@ Request:
         "name": "Carol",
         "email": "caroline@gmail.com",
         "password": "carolzinha10",
-        "document": "15871239757",
-        "phoneNumber": "981461990",
+        "document": "1486485647",
+        "phoneNumber": "48648464",
         "isAdmin": 1, (Admin - 1, user - 0)
         "address": "rua garnier", (optional)
         "description": "descrição de mim" (optional)
@@ -64,8 +64,8 @@ Response:
         "name": "Carol",
         "email": "caroline@gmail.com",
         "password": "$2b$10$HlYHWaRttu54vFP2ITmkBeVvkPtxPfVV6eTPsek5GZqAvw5g/geRS",
-        "phoneNumber": "981461990",
-        "document": "15871239757",
+        "phoneNumber": "48648464",
+        "document": "1486485647",
         "isAdmin": 1,
         "address": "rua garnier",
         "description": "descrição de mim",
@@ -121,8 +121,8 @@ Response:
         "name": "Carol",
         "email": "caroline@gmail.com",
         "password": "$2b$10$HlYHWaRttu54vFP2ITmkBeVvkPtxPfVV6eTPsek5GZqAvw5g/geRS",
-        "phoneNumber": "981461990",
-        "document": "15871239757",
+        "phoneNumber": "48648464",
+        "document": "1486485647",
         "isAdmin": 1,
         "address": "rua garnier",
         "description": "descrição de mim",
@@ -206,7 +206,7 @@ Response:
         "name": "Caroline de Souza",
         "email": "caroline@gmail.com",
         "password": "$2b$10$7pyHe2K8ExQxul4X07xJC.oxREd7RCqsL2yHErCP4r4/cK4EoLT/q",
-        "phoneNumber": "981461990",
+        "phoneNumber": "48648464",
         "document": "373.996.890-75",
         "isAdmin": 1,
         "address": "rua juscelino K",
@@ -388,7 +388,7 @@ Response:
     {
         "name": "caroline",
         "email": "caroline@gmail.com",
-        "phoneNumber": "981461990",
+        "phoneNumber": "48648464",
         "description": null
     }
 
